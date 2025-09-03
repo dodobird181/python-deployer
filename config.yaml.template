@@ -1,8 +1,10 @@
 config:
+  apps:
+    - name: "Dodo Email Sender"
+      endpoint: "/deploy_email_sender"
+      run_args: ["/home/dodo/Documents/github/python-deployer/test_deploy.sh"]
   logs:
     dir: "logs/"
   security:
-    max_email_payload_bytes: 65500
+    max_payload_bytes: 4000  # message no larger than 4KB
     api_secret: "FAKE_DEV_SECRET_NOT_SECURE!!!!!!"
-  email:
-    sender: "dodo@sammorris.ca"
