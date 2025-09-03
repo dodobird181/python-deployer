@@ -1,7 +1,7 @@
 import json
 import subprocess
 from dataclasses import dataclass
-from typing import List
+from typing import Any, Dict, List
 
 
 @dataclass
@@ -25,10 +25,20 @@ class Config:
         endpoint: str
         run_args: List[str]
 
+    @dataclass
+    class Gunicorn:
+        """
+        Gunicorn options.
+        """
+
+        app_name: str
+        options: Dict[str, Any]
+
     apps: List[App]
     logdir: str
     max_email_payload_bytes: int
     api_secret: str
+    gunicorn: Gunicorn
 
     def __str__(self) -> str:
         return "<Config: apps={}, logdir={}, max_email_payload_bytes={}, api_secret={}>".format(
@@ -52,6 +62,10 @@ def load_config(config_path="config.yaml") -> Config:
                 )
                 for app in data["apps"]
             ],
+            gunicorn=Config.Gunicorn(
+                app_name=data["gunicorn"]["app_name"],
+                options=data["gunicorn"]["run_args"],
+            ),
         )
     except (KeyError, ValueError) as e:
         raise Config.InvalidConfig from e

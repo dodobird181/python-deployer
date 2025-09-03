@@ -124,10 +124,10 @@ for deploy_app in config.apps:
                 ) as proc:
                     if proc.stdout:
                         for line in proc.stdout:
-                            logger.info(line.strip())
+                            logger.info(f"<{deploy_app.name}> {line.strip()}")
                     if proc.stderr:
                         for line in proc.stderr:
-                            logger.error(line.strip())
+                            logger.error(f"<{deploy_app.name}> {line.strip()}")
                             raise Exception("Subprocess error!")
                     proc.wait()
 

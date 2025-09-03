@@ -1,10 +1,23 @@
 config:
   apps:
-    - name: "Dodo Email Sender"
-      endpoint: "/deploy_email_sender"
-      run_args: ["/home/dodo/Documents/github/python-deployer/test_deploy.sh"]
+    # Configure which apps to deploy here.
+    - name: "App 1"  # For logging purposes.
+      endpoint: "/deploy_app_1"  # The actual route used to trigger a deployment.
+      run_args: ["/usr/bin/python /srv/app_1/deploy_script.py"]  # The command used to run the deploy logic on your server.
+    - name: "App 2"
+      endpoint: "/deploy_app_2"
+      run_args: ["./test_deploy_endpoint.sh"]
   logs:
     dir: "logs/"
   security:
     max_payload_bytes: 4000  # message no larger than 4KB
     api_secret: "FAKE_DEV_SECRET_NOT_SECURE!!!!!!"
+  gunicorn:
+    # Unused unless you start the app with production.py. Running with main.py is for development purposes only!
+    app_name: 'Python-Deployer'
+    run_args:
+      workers: 1
+      bind: "127.0.0.1:8080"
+      accesslog: "-" # gunicorn will send to stdout which is captured by the Python logger.
+      errorlog: "-" # gunicorn will send to stderr which is captured by the Python logger.
+      loglevel: "info"
