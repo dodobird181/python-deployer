@@ -1,0 +1,8 @@
+config:
+  logs:
+    dir: "logs/"
+  security:
+    max_email_payload_bytes: 65500
+    api_secret: "FAKE_DEV_SECRET_NOT_SECURE!!!!!!"
+  email:
+    sender: "dodo@sammorris.ca"

@@ -1,2 +1,2 @@
-# python-deployer
- A Flask Server that Listens and Responds to Deployment Webhooks
+# Python-Deployer
+Python-Deployer is a Flask app that listens for deployment webhooks and runs the corresponding deploy script on the server if the request is authenticated.
