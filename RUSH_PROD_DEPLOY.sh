@@ -1,3 +1,2 @@
-git switch deploy-to-rush-admin
-git pull
+git pull origin deploy-to-rush-admin
 systemctl restart python-deployer
