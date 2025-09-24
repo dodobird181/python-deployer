@@ -17,7 +17,7 @@ config:
     app_name: 'Python-Deployer'
     run_args:
       workers: 1
-      bind: "127.0.0.1:8080"
+      bind: "127.0.0.1:5000"
       accesslog: "-" # gunicorn will send to stdout which is captured by the Python logger.
       errorlog: "-" # gunicorn will send to stderr which is captured by the Python logger.
       loglevel: "info"
