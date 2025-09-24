@@ -10,6 +10,13 @@ from gunicorn.app.base import BaseApplication
 from main import app as flask_app
 from main import config, logger
 
+"""
+Entrypoint for running the app as a Gunicorn process that does three main things:
+    1. Wraps main.py's Flask app in a Gunicorn process;
+    2. Overrides any Gunicorn config vars with the values in `config.gunicorn.run_args`; and,
+    3. Normalizes Gunicorn logs and sends them to the Python logger.
+"""
+
 
 class StreamToLoggerFromGunicornProcess:
     """
@@ -41,7 +48,7 @@ class StreamToLoggerFromGunicornProcess:
                 msg = " ".join(message.replace(gunicorn_level_txt, "").split())
                 logger.log(level=level, msg=msg)
 
-            # Simple heuristic: if "[ERROR]" in message, log as ERROR, else INFO
+            # Simple heuristic to determine what level to log gunicorn messages at.
             gunicorn_levels = {
                 logging.DEBUG: "[DEBUG]",
                 logging.INFO: "[INFO]",
