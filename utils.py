@@ -3,7 +3,8 @@ from flask import Request
 
 def request_to_sanitized_json(req: Request) -> dict:
     """
-    Convert a Flask request into a safe JSON-serializable dict (should not contain any sensitive data)."""
+    Convert a Flask request into a safe JSON-serializable dict (should not contain any sensitive data).
+    """
     return {
         "method": req.method,
         "path": req.path,
@@ -12,4 +13,13 @@ def request_to_sanitized_json(req: Request) -> dict:
         "json": req.get_json(silent=True) if req.is_json else None,
         "ip": req.headers.get("X-Forwarded-For", req.remote_addr),
         "user_agent": req.user_agent.string,
+    }
+
+
+def request_to_dirty_json(req: Request) -> dict:
+    """
+    Convert a Flask request into a JSON-serializable dict that MAY CONTAIN SENSITIVE DATA like the X-Signature.
+    """
+    return request_to_sanitized_json(req) | {
+        "headers": {key: value for key, value in req.headers.items()},
     }
