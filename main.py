@@ -12,7 +12,7 @@ from flask_limiter.util import get_remote_address
 
 from config import load_config
 from logger import logger_from_config
-from utils import request_to_dirty_json, request_to_sanitized_json
+from utils import request_to_sanitized_json
 
 app = flask.Flask(__name__)
 config = load_config()
@@ -109,15 +109,6 @@ for deploy_app in config.apps:
 
     def make_route(route):
         def handler():
-
-            logger.debug(
-                "Full request: {}".format(
-                    json.dumps(
-                        request_to_dirty_json(flask.request),
-                        indent=2,
-                    )
-                )
-            )
 
             _abort_if_payload_too_large()
             _abort_if_invalid_signature()
