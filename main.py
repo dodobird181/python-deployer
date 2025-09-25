@@ -128,8 +128,9 @@ for deploy_app in config.apps:
                     if proc.stderr:
                         for line in proc.stderr:
                             logger.error(f"<{deploy_app.name}> {line.strip()}")
-                            raise Exception("Subprocess error!")
-                    proc.wait()
+                    exit_code = proc.wait()
+                    if exit_code != 0:
+                        raise Exception(f"Subprocess exited with code: {exit_code}!")
 
                 elapsed = now().timestamp() - start.timestamp()
                 message = f"Deployment for {deploy_app.name} succeeded in {elapsed:.2f} seconds."
