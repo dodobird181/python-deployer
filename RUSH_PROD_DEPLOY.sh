@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 
 git pull origin deploy-to-rush-admin
-systemctl restart python-deployer
+sudo systemctl restart python-deployer.service
