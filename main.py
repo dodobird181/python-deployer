@@ -127,7 +127,12 @@ for deploy_app in config.apps:
                             logger.info(f"<{deploy_app.name}> {line.strip()}")
                     if proc.stderr:
                         for line in proc.stderr:
-                            logger.error(f"<{deploy_app.name}> {line.strip()}")
+                            # some processes use stderr for normal logging. Try to interpret what
+                            # they are saying and also rely on exit_code for failure condition.
+                            if "error" in line.lower() or "failed" in line.lower():
+                                logger.error(f"<{deploy_app.name}> {line.strip()}")
+                            else:
+                                logger.info(f"<{deploy_app.name}> {line.strip()}")
                     exit_code = proc.wait()
                     if exit_code != 0:
                         raise Exception(f"Subprocess exited with code: {exit_code}!")
