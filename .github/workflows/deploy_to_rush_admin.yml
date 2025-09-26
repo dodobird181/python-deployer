@@ -13,7 +13,7 @@ jobs:
       - name: Send Webhook
         id: request  # for reference when checking response status
         env:
-          SECRET: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}
+          SECRET: ${{ secrets.RUSH_DEPLOY_WEBHOOK_SECRET }}
         run: |
           BODY='{}'
           TIMESTAMP=$(date +%s)
