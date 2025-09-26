@@ -19,7 +19,7 @@ jobs:
           BODY='{}'
           TIMESTAMP=$(date +%s)
           SIGNATURE=$(echo -n "$TIMESTAMP$BODY" | openssl dgst -sha256 -hmac "$SECRET" | cut -d " " -f2)
-          response=$(curl -X POST https://whatstherush.earth/deploy/python-deployer \
+          response=$(curl -X POST $URL \
               -H "Content-Type: application/json" \
               -H "X-Timestamp: $TIMESTAMP" \
               -H "X-Signature: $SIGNATURE" \
