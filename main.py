@@ -39,7 +39,7 @@ def handle_exception(e):
     """
     # If it's an HTTPException, use its code; otherwise 500
     code = getattr(e, "code", 500)
-    return flask.jsonify(error=str(e), code=code, success="false"), code
+    return flask.jsonify(error=str(e), code=code, success=False), code
 
 
 def _abort_if_payload_too_large() -> None:
