@@ -34,4 +34,4 @@ jobs:
             echo "Deployment failed with status=${{ steps.request.outputs.status }}"
             exit 1
           fi
-          echo "Deployment succeeded ✅"
+          echo "Deployment succeeded."
