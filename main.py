@@ -134,7 +134,9 @@ for deploy_app in config.apps:
                             else:
                                 logger.info(f"<{deploy_app.name}> {line.strip()}")
                     exit_code = proc.wait()
-                    if exit_code != 0:
+                    if exit_code == -15:
+                        logger.warning("Subprocess killed by SIGTERM — likely due to service restart. Did python-deployer just deploy itself?")
+                    elif exit_code != 0:
                         raise Exception(f"Subprocess exited with code: {exit_code}!")
 
                 elapsed = now().timestamp() - start.timestamp()
