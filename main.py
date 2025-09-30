@@ -18,6 +18,8 @@ app = flask.Flask(__name__)
 config = load_config()
 logger = logger_from_config(config)
 
+logger.debug(config)
+
 
 # Attach rate-limiter
 limiter = Limiter(
