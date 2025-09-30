@@ -115,7 +115,7 @@ for deploy_app in config.apps:
 
             start = now()
             try:
-                logger.info(f"Starting deploy for '{deploy_app.name}'...")
+                logger.info(f"Starting deploy for '{deploy_app.name}' using \"{' '.join(deploy_app.run_args)}\"...")
                 with subprocess.Popen(
                     deploy_app.run_args,
                     stdout=subprocess.PIPE,
@@ -135,7 +135,9 @@ for deploy_app in config.apps:
                                 logger.info(f"<{deploy_app.name}> {line.strip()}")
                     exit_code = proc.wait()
                     if exit_code == -15:
-                        logger.warning("Subprocess killed by SIGTERM — likely due to service restart. Did python-deployer just deploy itself?")
+                        logger.warning(
+                            "Subprocess killed by SIGTERM — likely due to service restart. Did python-deployer just deploy itself?"
+                        )
                     elif exit_code != 0:
                         raise Exception(f"Subprocess exited with code: {exit_code}!")
 
