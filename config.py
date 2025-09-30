@@ -1,6 +1,6 @@
 import json
 import subprocess
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Any, Dict, List
 
 
@@ -44,6 +44,11 @@ class Config:
         return "<Config: apps={}, logdir={}, max_email_payload_bytes={}, api_secret={}>".format(
             self.apps, self.logdir, self.max_email_payload_bytes, "*****"
         )
+
+    def to_dict(self) -> Dict[str, Any]:
+        d = asdict(self)
+        d["api_secret"] = "*****"
+        return d
 
 
 def load_config(config_path="config.yaml") -> Config:

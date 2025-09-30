@@ -4,7 +4,6 @@ import json
 import logging
 import re
 import sys
-from dataclasses import asdict
 
 from gunicorn.app.base import BaseApplication
 
@@ -92,7 +91,7 @@ if __name__ == "__main__":
     logger.debug(
         "Starting gunicorn app '{}' for production environment with options: {}".format(
             config.gunicorn.app_name,
-            json.dumps(asdict(config), indent=2),
+            json.dumps(config.to_dict(), indent=2),
         )
     )
     sys.stdout = StreamToLoggerFromGunicornProcess()
