@@ -9,7 +9,7 @@ import flask
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
-from config import load_config
+from config import Config, load_config
 from logger import logger_from_config
 from utils import request_to_sanitized_json
 
@@ -105,7 +105,7 @@ def index():
 
 for deploy_app in config.apps:
 
-    def make_route(route):
+    def make_route(_deploy_app: Config.App):
         def handler():
 
             _abort_if_payload_too_large()
@@ -113,24 +113,26 @@ for deploy_app in config.apps:
 
             start = now()
             try:
-                logger.info(f"Starting deploy for '{deploy_app.name}' using \"{' '.join(deploy_app.run_args)}\"...")
+                logger.info(
+                    f"Starting deploy for '{_deploy_app.name}' using \"{' '.join(_deploy_app.run_args)}\"..."
+                )
                 with subprocess.Popen(
-                    deploy_app.run_args,
+                    _deploy_app.run_args,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     text=True,
                 ) as proc:
                     if proc.stdout:
                         for line in proc.stdout:
-                            logger.info(f"<{deploy_app.name}> {line.strip()}")
+                            logger.info(f"<{_deploy_app.name}> {line.strip()}")
                     if proc.stderr:
                         for line in proc.stderr:
                             # some processes use stderr for normal logging. Try to interpret what
                             # they are saying and also rely on exit_code for failure condition.
                             if "error" in line.lower() or "failed" in line.lower():
-                                logger.error(f"<{deploy_app.name}> {line.strip()}")
+                                logger.error(f"<{_deploy_app.name}> {line.strip()}")
                             else:
-                                logger.info(f"<{deploy_app.name}> {line.strip()}")
+                                logger.info(f"<{_deploy_app.name}> {line.strip()}")
                     exit_code = proc.wait()
                     if exit_code == -15:
                         logger.warning(
@@ -140,20 +142,20 @@ for deploy_app in config.apps:
                         raise Exception(f"Subprocess exited with code: {exit_code}!")
 
                 elapsed = now().timestamp() - start.timestamp()
-                message = f"Deployment for {deploy_app.name} succeeded in {elapsed:.2f} seconds."
+                message = f"Deployment for {_deploy_app.name} succeeded in {elapsed:.2f} seconds."
                 return flask.jsonify({"success": True, "message": message}), 200
 
             except Exception as e:
                 elapsed = now().timestamp() - start.timestamp()
-                logger.error(f"Failed to deploy app: {deploy_app.name}.", exc_info=e)
+                logger.error(f"Failed to deploy app: {_deploy_app.name}.", exc_info=e)
                 message = f"Deployment failed after {elapsed:.2f} seconds."
                 return flask.jsonify({"success": False, "message": message}), 500
 
         # give the function a unique name
         handler.__name__ = f"handler_{uuid4().hex}"
-        app.route(route, methods=["POST"])(handler)
+        app.route(_deploy_app.endpoint, methods=["POST"])(handler)
 
-    make_route(deploy_app.endpoint)
+    make_route(deploy_app)
     logger.debug(f"Created API route for '{deploy_app.name} @ {deploy_app.endpoint} --> {deploy_app.run_args}'")
 
 
