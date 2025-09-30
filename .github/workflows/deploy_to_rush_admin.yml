@@ -13,7 +13,7 @@ jobs:
       - name: Send Webhook
         id: request  # for reference when checking response status
         env:
-          URL: ${{ secrets.RUSH_DEPLOY_WEBHOOK_URL }}
+          URL: ${{ secrets.RUSH_DEPLOY_WEBHOOK_URL_PYTHON_DEPLOYER }}
           SECRET: ${{ secrets.RUSH_DEPLOY_WEBHOOK_SECRET }}
         run: |
           BODY='{}'
