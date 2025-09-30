@@ -154,6 +154,7 @@ for deploy_app in config.apps:
         app.route(route, methods=["POST"])(handler)
 
     make_route(deploy_app.endpoint)
+    logger.debug(f"Created API route for '{deploy_app.name} @ {deploy_app.endpoint} --> {deploy_app.run_args}'")
 
 
 if __name__ == "__main__":
