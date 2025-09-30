@@ -91,7 +91,7 @@ if __name__ == "__main__":
     logger.debug(
         "Starting gunicorn app '{}' for production environment with options: {}".format(
             config.gunicorn.app_name,
-            json.dumps(config.gunicorn.options, indent=2),
+            json.dumps(config, indent=2),
         )
     )
     sys.stdout = StreamToLoggerFromGunicornProcess()
