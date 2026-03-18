@@ -23,6 +23,7 @@ class Config:
 
         name: str
         endpoint: str
+        cwd: str
         run_args: List[str]
 
     @dataclass
@@ -63,6 +64,7 @@ def load_config(config_path="config.yaml") -> Config:
                 Config.App(
                     name=app["name"],
                     endpoint=app["endpoint"],
+                    cwd=app["cwd"],
                     run_args=app["run_args"],
                 )
                 for app in data["apps"]

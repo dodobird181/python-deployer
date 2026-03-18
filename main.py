@@ -1,5 +1,6 @@
 import hashlib
 import hmac
+import os
 import subprocess
 import time
 from datetime import datetime
@@ -114,13 +115,19 @@ for deploy_app in config.apps:
             start = now()
             try:
                 logger.info(
-                    f"Starting deploy for '{_deploy_app.name}' using \"{' '.join(_deploy_app.run_args)}\"..."
+                    "Starting deploy for '%s' using '%s' in '%s'...",
+                    _deploy_app.name,
+                    " ".join(_deploy_app.run_args),
+                    _deploy_app.cwd,
                 )
+
+                working_dir = os.chdir(_deploy_app.cwd) if os.chdir(_deploy_app.cwd) != "." else os.getcwd()
                 with subprocess.Popen(
                     _deploy_app.run_args,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     text=True,
+                    cwd=working_dir,
                 ) as proc:
                     if proc.stdout:
                         for line in proc.stdout:
@@ -160,4 +167,5 @@ for deploy_app in config.apps:
 
 
 if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=5000, debug=True)
     app.run(host="127.0.0.1", port=5000, debug=True)
