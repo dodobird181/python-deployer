@@ -3,9 +3,11 @@ config:
     # Configure which apps to deploy here.
     - name: "App 1"  # For logging purposes.
       endpoint: "/deploy_app_1"  # The actual route used to trigger a deployment.
+      cwd: "."  # The current working directory to execute the deployment script from. Use "." for the current working directory of the running python program. 
       run_args: ["/usr/bin/python /srv/app_1/deploy_script.py"]  # The command used to run the deploy logic on your server.
     - name: "App 2"
       endpoint: "/deploy_app_2"
+      cwd: "/home/dodo/Documents/github"
       run_args: ["./test_deploy_endpoint.sh"]
   logs:
     dir: "logs/"
